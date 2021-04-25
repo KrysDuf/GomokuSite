@@ -1,0 +1,74 @@
+﻿
+<!DOCTYPE html>
+@{ 
+    //the list conatining the order of moves
+    List<string> game = (List<string>)ViewData["Game"];
+}
+<script>
+    var gameTurns = [];
+    var P1Turn = false
+    $(document).ready(function () {
+        $('#hResult').hide();
+        play()
+    });
+
+    //a forloop through the list of moves that shows the order that they have been played
+    //a delay happens between each to preven all moves from happening all at the same time.
+    async function play() {
+        for (i = 0; i < gameTurns.length-1; i++) {
+            if (P1Turn) {
+                document.getElementById(gameTurns[i]).src = "/Pictures/BoardTileP1.png";
+                P1Turn = false;
+            } else {
+                document.getElementById(gameTurns[i]).src = "/Pictures/BoardTileP2.png";
+                P1Turn = true;
+            }
+            await new Promise(r => setTimeout(r, 300));
+        }
+            $('#hResult').show();       
+    }
+
+    @for (int i = 0; i < game.Count; i++)
+    {
+        @:gameTurns.push("@game[i]");
+    }
+
+    //resets the board to and runs the play function again
+    async function replay() {
+        for (i = 0; i < 11; i++) {
+            for (j = 0; j < 11; j++) {
+                document.getElementById(i+"|"+j).src = "/Pictures/BoardTile.png";
+            }
+        }
+        P1Turn = false;
+        await new Promise(r => setTimeout(r, 200));
+        play();
+    }
+</script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <h1 id="hResult">@ViewData["Result"]</h1>
+    <div style="padding:20px; width:505px; height:505px; float:left">
+        <table>
+            @for (int i = 0; i < 11; i++)
+            {
+                <tr>
+                    @for (int x = 0; x < 11; x++)
+                    {
+                        string id = i.ToString() + "|" + x.ToString();
+                        <td>
+                            <img id="@id" src="~/Pictures/BoardTile.png" width="30" height="31" />
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <button onclick="replay()" style="float:left;">Replay</button>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+﻿@model GomukuWebsite.Models.PVAModel
+
+<!DOCTYPE html>
+<script>
+    $(document).ready(function () {
+        $('#divAIupload').hide();
+        $('#selectedAI').val(null);
+    });
+
+    function chkChangeAI1(chk) {
+        if (chk.checked) {
+            $('#divAIupload').show();
+            $('#divAIselect').hide();
+            $('#selectedAI').val(null)
+
+        }
+        else {
+            $('#divAIselect').show();
+            $('#divAIupload').hide();
+            $('#AI').val(null)
+        }
+    }
+</script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <h6>PvA</h6>
+        <h4>@ViewBag.ErrorMessage</h4>
+        @using (Html.BeginForm("UploadPVA", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div style="width:100%; float:left;">
+                <div style="float: left; width: 40%">
+                    <label>Upload New</label>
+                    <input type="checkbox" name="chkAI" id="chkAI" onchange="chkChangeAI(this)">
+                    <br />
+                    <div id="divAIupload" name="" divAIupload"">
+                        <label>Student Number</label>
+                        @Html.TextBox("ID", "", new { type = "TextBox" })
+
+                        <br />
+
+                        <label>Uplaod AI"</label>
+                        <input type="file" name="AI" id="AI" />
+                    </div>
+                    <div id="divAIselect">
+                        <label>Select AI</label>
+                        @Html.DropDownListFor(m => m.selectedAI, Model.AIList.Select(AI => new SelectListItem()
+                        {
+                            Text = AI,
+                            Value = AI
+                        }))
+                    </div>
+                </div>
+            </div>
+            <div style="width:100%; float:left;">
+                <input type="submit" value="Submit" style="float:right;" />
+            </div>
+        }
+    </div>
+</body>
+</html>

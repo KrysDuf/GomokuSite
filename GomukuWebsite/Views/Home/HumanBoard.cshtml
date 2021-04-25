@@ -1,0 +1,70 @@
+﻿
+
+<!DOCTYPE html>
+
+<script>
+    var gameTurns = [];
+    var AITurn = false
+    $(document).ready(function () {
+        $('#hResult').hide();
+    });
+
+    function tileClick(id) {    
+        if (!AITurn) {           
+            var arr = document.getElementById(id).src.split("/");
+            if (arr[arr.length - 1] != "BoardTile.png") {
+                return
+            }
+            document.getElementById(id).src = "/Pictures/BoardTileP2.png";  
+            P1Turn = true;  
+            $.ajax({
+                url: '@Url.Action("HumanMove", "Home")',
+                data: {
+                    ID: id
+                },
+                type: 'POST'
+            }).done(function(result) {
+                if (result.gameEnd) {
+                    $('#hResult').text(result.result);
+                    $('#hResult').show();
+                } else {
+                    document.getElementById(result.moves).src = "/Pictures/BoardTileP1.png";
+                    AITurn = false;  
+                }               
+            }).fail(function (result) {
+                alert("Error")
+            });
+        }
+    }
+
+    var hoverID
+    function tileHover(id) {
+
+    }
+</script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <h1 id="hResult"></h1>
+    <div style="padding:20px; width:505px; height:505px; float:left">
+        <table>
+            @for (int i = 0; i < 11; i++)
+            {
+                <tr>
+                    @for (int x = 0; x < 11; x++)
+                    {
+                        string id = i.ToString() + "|" + x.ToString();
+                        <td>
+                            <img id="@id" src="~/Pictures/BoardTile.png" onmouseover="tileHover(this.id)" onclick="tileClick(this.id)" width="30" height="31" />
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+
+</body>
+</html>

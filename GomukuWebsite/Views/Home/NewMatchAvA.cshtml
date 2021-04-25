@@ -1,0 +1,111 @@
+﻿@model GomukuWebsite.Models.AVAModel
+<!DOCTYPE html>
+
+<script>
+    $(document).ready(function () {
+        $('#divAI1upload').hide();
+        $('#divAI2upload').hide();
+        $('#selectedAI1').val(null);
+        $('#selectedAI2').val(null);
+    });
+
+    function chkChangeAI1(chk)
+    {
+        if (chk.checked) {
+            $('#divAI1upload').show();
+            $('#divAI1select').hide();
+            $('#selectedAI1').val(null)
+            
+        }
+        else {
+            $('#divAI1select').show();
+            $('#divAI1upload').hide();
+            $('#AI1').val(null)
+        }
+    }
+
+    function chkChangeAI2(chk) {
+        if (chk.checked) {
+            $('#divAI2upload').show();
+            $('#divAI2select').hide();
+            $('#selectedAI2').val(null)
+        }
+        else {
+            $('#divAI2select').show();
+            $('#divAI2upload').hide();
+            $('#AI2').val(null)
+        }
+    }
+
+    function AutoCalculateMandateOnChange(element) {
+        alert("test");
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <h6>AI vs AI</h6>
+        <h4>@ViewBag.ErrorMessage</h4>
+        @using (Html.BeginForm("UploadAVA", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {       
+            <div style="width:100%; float:left;">
+                <div style="float: left; width: 40%">
+                    <label>Upload New</label>
+                    <input type="checkbox" name="chkAI1" id="chkAI1" onchange="chkChangeAI1(this)">
+                    <br />
+                    <div id="divAI1upload" name="" divAI1upload"">
+                        <label>Student Number</label>
+                        @Html.TextBox("ID1", "", new { type = "TextBox" })
+
+                        <br />
+
+                        <label>Uplaod AI 1"</label>
+                        <input type="file" name="AI1" id="AI1" />
+                    </div>
+                    <div id="divAI1select">
+                        <label>Select AI 1</label>
+                        @Html.DropDownListFor(m => m.selectedAI1, Model.AIList.Select(AI => new SelectListItem()
+                        {
+                            Text = AI,
+                            Value = AI
+                        }))
+                    </div>
+                </div>
+
+                <div style="float: right; width: 40%">
+                    <label>Upload New</label>
+                    <input type="checkbox" name="chkAI2" id="chkAI2" onchange="chkChangeAI2(this)">
+                    <br />
+                    <div id="divAI2upload" name="" divAI1upload"">
+                        <label>Student Number</label>
+                        @Html.TextBox("ID2", "", new { type = "TextBox" })
+
+                        <br />
+
+                        <label>Uplaod AI 2</label>
+                        <input type="file" name="AI1" id="AI1" />
+                    </div>
+                    <div id="divAI2select">
+                        <label>Select AI 2</label>
+                        @Html.DropDownListFor(m => m.selectedAI2, Model.AIList.Select(AI => new SelectListItem()
+                        {
+                            Text = AI,
+                            Value = AI
+                        }))
+                    </div>
+                </div>
+            </div>
+            <div style="width:100%; float:left;">
+                <input type="submit" value="Submit" style="float:right;" />
+            </div>   
+        }
+
+        @ViewBag.Message
+    </div>
+</body>
+</html>
