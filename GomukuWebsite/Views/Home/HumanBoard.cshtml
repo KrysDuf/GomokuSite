@@ -9,14 +9,19 @@
         $('#hResult').hide();
     });
 
-    function tileClick(id) {    
+    //triggers on a person clicking any tile on the board
+    function tileClick(id) { 
+        //only happens if it not they AI's turn
         if (!AITurn) {           
             var arr = document.getElementById(id).src.split("/");
+            //check if the board tile has not got a piece on it
             if (arr[arr.length - 1] != "BoardTile.png") {
                 return
             }
+            //sets the tile that was clicked to have a piece on it
             document.getElementById(id).src = "/Pictures/BoardTileP2.png";  
             P1Turn = true;  
+            //makes call to server with the grid coorinates
             $.ajax({
                 url: '@Url.Action("HumanMove", "Home")',
                 data: {
@@ -25,14 +30,16 @@
                 type: 'POST'
             }).done(function(result) {
                 if (result.gameEnd) {
+                    //shows game result
                     $('#hResult').text(result.result);
                     $('#hResult').show();
                 } else {
+                    //places AI's tile and makes it the player's turn again
                     document.getElementById(result.moves).src = "/Pictures/BoardTileP1.png";
                     AITurn = false;  
                 }               
             }).fail(function (result) {
-                alert("Error")
+                alert("An Error has accoured")
             });
         }
     }
@@ -48,9 +55,10 @@
     <title></title>
 </head>
 <body>
-    <h1 id="hResult"></h1>
-    <div style="padding:20px; width:505px; height:505px; float:left">
+    
+    <div style="padding:20px; width:455px; height:455px; float:left">
         <table>
+            @* generates a fresh 11*11 board *@
             @for (int i = 0; i < 11; i++)
             {
                 <tr>
@@ -64,6 +72,9 @@
                 </tr>
             }
         </table>
+    </div>
+    <div style="margin-top:50px;">
+        <h1 id="hResult" style="float:left;"></h1>
     </div>
 
 </body>

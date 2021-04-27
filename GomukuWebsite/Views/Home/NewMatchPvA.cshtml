@@ -2,19 +2,27 @@
 
 <!DOCTYPE html>
 <script>
+    //sets defaults on page load
     $(document).ready(function () {
         $('#divAIupload').hide();
-        $('#selectedAI').val(null);
-    });
+        $('#selectedAI')[0].selectedIndex = 0;
 
-    function chkChangeAI1(chk) {
+        //binds checkbox funtions on document load
+        $("#chkNewAI").change(function () {
+            chkChangeAI(this);
+        });
+    });
+    //chk: reference to the checkbox that was clicked to see if it is checked or not
+    //function responible for toggling the upload new/select AI options
+    function chkChangeAI(chk) {
         if (chk.checked) {
             $('#divAIupload').show();
             $('#divAIselect').hide();
-            $('#selectedAI').val(null)
+            $('#selectedAI')[0].selectedIndex = 0;
 
         }
-        else {
+        else
+        {
             $('#divAIselect').show();
             $('#divAIupload').hide();
             $('#AI').val(null)
@@ -28,22 +36,22 @@
 </head>
 <body>
     <div>
-        <h6>PvA</h6>
+        <h3>Player VS AI</h3>
         <h4>@ViewBag.ErrorMessage</h4>
         @using (Html.BeginForm("UploadPVA", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <div style="width:100%; float:left;">
                 <div style="float: left; width: 40%">
                     <label>Upload New</label>
-                    <input type="checkbox" name="chkAI" id="chkAI" onchange="chkChangeAI(this)">
+                    @Html.CheckBoxFor(m => m.newAI, new { id = "chkNewAI" })
                     <br />
                     <div id="divAIupload" name="" divAIupload"">
-                        <label>Student Number</label>
-                        @Html.TextBox("ID", "", new { type = "TextBox" })
+                        <label>Name</label>
+                        @Html.TextBox("ID", "", new { type = "TextBox", @maxlength = "10" })
 
                         <br />
 
-                        <label>Uplaod AI"</label>
+                        <label>Uplaod AI</label>
                         <input type="file" name="AI" id="AI" />
                     </div>
                     <div id="divAIselect">

@@ -12,6 +12,8 @@ namespace GomukuWebsite.Python
 {
     public class Match
     {
+        //player1: ID of the first AI
+        //player2: ID of the second AI
         string player1;
         string player2;
 
@@ -20,10 +22,15 @@ namespace GomukuWebsite.Python
             this.player1 = player1;
             this.player2 = player2;
         }
+
+        //Creates the Process for running the match
+        //Result: A string passed out that has the result message.
+        //Return: A List of strings containing each move in order
         public List<string> Play(out string result)
         {
            
             var psi = new ProcessStartInfo();
+            //Path to python installation change if needed
             psi.FileName = @"C:\Users\Kryst\AppData\Local\Programs\Python\Python39\python.exe";
 
             var script = HttpContext.Current.Server.MapPath(@"~\Python\gomoku.py");
@@ -38,6 +45,7 @@ namespace GomukuWebsite.Python
             {
                 using (StreamReader reader = process.StandardOutput)
                 {
+                    //reads the all the moves and reformats the string into an List of strings
                     var game = reader.ReadToEnd();
                     game = (game.Replace(" ", ""));
                     string[] moveList = (game.Replace("\n", "")).Split('\r');
@@ -48,6 +56,7 @@ namespace GomukuWebsite.Python
                         intMoveList.Add(s);
                     }
                     result = moveList[moveList.Length-2].Replace("-1", " White").Replace("1", " Black");
+                    //Ends simulation
                     process.Close();
                     return intMoveList;
                 }

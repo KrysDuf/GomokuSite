@@ -23,6 +23,7 @@
                 document.getElementById(gameTurns[i]).src = "/Pictures/BoardTileP2.png";
                 P1Turn = true;
             }
+            //pauses for 0.3s so not everything happens instantly
             await new Promise(r => setTimeout(r, 300));
         }
             $('#hResult').show();       
@@ -41,7 +42,7 @@
             }
         }
         P1Turn = false;
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 500));
         play();
     }
 </script>
@@ -51,8 +52,8 @@
     <title></title>
 </head>
 <body>
-    <h1 id="hResult">@ViewData["Result"]</h1>
-    <div style="padding:20px; width:505px; height:505px; float:left">
+    <div style="padding:20px; width:455px; height:455px; float:left">
+        @* generates a fresh 11*11 board *@
         <table>
             @for (int i = 0; i < 11; i++)
             {
@@ -67,8 +68,14 @@
                 </tr>
             }
         </table>
+        <button onclick="replay()" style="float:left;">Replay</button>
     </div>
-    <button onclick="replay()" style="float:left;">Replay</button>
+    <div>
+        <div style="margin-top:50px; float:left;">
+            <h2 id="hResult" style="float:left;">@ViewData["Result"]</h2>
+        </div>
+    </div>
+    
 
 </body>
 </html>

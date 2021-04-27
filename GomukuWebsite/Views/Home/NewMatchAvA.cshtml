@@ -2,43 +2,55 @@
 <!DOCTYPE html>
 
 <script>
+    //sets defaults on page load
     $(document).ready(function () {
         $('#divAI1upload').hide();
         $('#divAI2upload').hide();
-        $('#selectedAI1').val(null);
-        $('#selectedAI2').val(null);
+        $('#selectedAI1')[0].selectedIndex = 0;
+        $('#selectedAI2')[0].selectedIndex = 0;
+
+        //binds checkbox funtions on document load
+        $("#chkNewAI1").change(function () {
+            chkChangeAI1(this);
+        });
+        $("#chkNewAI2").change(function () {
+            chkChangeAI2(this);
+        });
     });
 
+    //chk: reference to the checkbox that was clicked to see if it is checked or not
+    //function responible for toggling the upload new/select AI options
+    //only applies to the first AI selection
     function chkChangeAI1(chk)
     {
         if (chk.checked) {
             $('#divAI1upload').show();
             $('#divAI1select').hide();
-            $('#selectedAI1').val(null)
+            $('#selectedAI1')[0].selectedIndex = 0;
             
         }
-        else {
+        else
+        {
             $('#divAI1select').show();
             $('#divAI1upload').hide();
-            $('#AI1').val(null)
+            $('#AI1').val(null);
         }
     }
 
+    //chk: reference to the checkbox that was clicked to see if it is checked or not
+    //function responible for toggling the upload new/select AI options
+    //only applies to the second AI selection
     function chkChangeAI2(chk) {
         if (chk.checked) {
             $('#divAI2upload').show();
             $('#divAI2select').hide();
-            $('#selectedAI2').val(null)
+            $('#selectedAI2')[0].selectedIndex = 0;
         }
         else {
             $('#divAI2select').show();
             $('#divAI2upload').hide();
-            $('#AI2').val(null)
+            $('#AI2').val(null);
         }
-    }
-
-    function AutoCalculateMandateOnChange(element) {
-        alert("test");
     }
 </script>
 
@@ -49,22 +61,23 @@
 </head>
 <body>
     <div>
-        <h6>AI vs AI</h6>
+        <h3>AI vs AI</h3>
         <h4>@ViewBag.ErrorMessage</h4>
         @using (Html.BeginForm("UploadAVA", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {       
             <div style="width:100%; float:left;">
                 <div style="float: left; width: 40%">
                     <label>Upload New</label>
-                    <input type="checkbox" name="chkAI1" id="chkAI1" onchange="chkChangeAI1(this)">
+                    @Html.CheckBoxFor(m => m.newAI1, new { id = "chkNewAI1" })
+                    
                     <br />
                     <div id="divAI1upload" name="" divAI1upload"">
-                        <label>Student Number</label>
-                        @Html.TextBox("ID1", "", new { type = "TextBox" })
+                        <label>Name</label>
+                        @Html.TextBox("ID1", "", new { type = "TextBox", @maxlength = "10" })
 
                         <br />
 
-                        <label>Uplaod AI 1"</label>
+                        <label>Uplaod AI 1</label>
                         <input type="file" name="AI1" id="AI1" />
                     </div>
                     <div id="divAI1select">
@@ -79,11 +92,11 @@
 
                 <div style="float: right; width: 40%">
                     <label>Upload New</label>
-                    <input type="checkbox" name="chkAI2" id="chkAI2" onchange="chkChangeAI2(this)">
+                    @Html.CheckBoxFor(m => m.newAI2, new { id = "chkNewAI2" })
                     <br />
                     <div id="divAI2upload" name="" divAI1upload"">
-                        <label>Student Number</label>
-                        @Html.TextBox("ID2", "", new { type = "TextBox" })
+                        <label>Name</label>
+                        @Html.TextBox("ID2", "", new { type = "TextBox", @maxlength = "10" })
 
                         <br />
 
@@ -98,11 +111,12 @@
                             Value = AI
                         }))
                     </div>
+                    <div style="width:100%; float:left;">
+                        <input type="submit" value="Submit" style="float:right; margin-right:110px;" />
+                    </div>
                 </div>
             </div>
-            <div style="width:100%; float:left;">
-                <input type="submit" value="Submit" style="float:right;" />
-            </div>   
+
         }
 
         @ViewBag.Message

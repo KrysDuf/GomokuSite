@@ -61,6 +61,8 @@ def turn(board, player, turn_id):
     else:
         print("Player " + str(player.ID) + " illegal move at " + str(moveLoc))
         return turn_id*-1, board
+    
+    # modification: only prints the move of the AI in 'X|Y' format
     print(moveLoc[0],"|",moveLoc[1])
     # test if any player wins the game
     if winningTest(player.ID, board, X_IN_A_LINE):
